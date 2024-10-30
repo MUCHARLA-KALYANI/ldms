@@ -1,25 +1,20 @@
-package com.example.LearningAndDevelopment.training.model;
+package com.example.LearningAndDevelopment.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "training_requests")
 public class TrainingRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "training_program")
-    private String trainingProgram;
-
-    @Column(name = "position")
-    private String position;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "created_date")
-    private String createdDate;
+    private Long id; // Change this to match your ID type
+    private String employeeName;
+    private String trainingCourse;
+    private String status; // e.g., "Pending", "Approved", "Rejected"
+    // Add other fields as necessary
 
     // Getters and Setters
     public Long getId() {
@@ -30,20 +25,20 @@ public class TrainingRequest {
         this.id = id;
     }
 
-    public String getTrainingProgram() {
-        return trainingProgram;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
-    public void setTrainingProgram(String trainingProgram) {
-        this.trainingProgram = trainingProgram;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
-    public String getPosition() {
-        return position;
+    public String getTrainingCourse() {
+        return trainingCourse;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setTrainingCourse(String trainingCourse) {
+        this.trainingCourse = trainingCourse;
     }
 
     public String getStatus() {
@@ -52,13 +47,5 @@ public class TrainingRequest {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
     }
 }

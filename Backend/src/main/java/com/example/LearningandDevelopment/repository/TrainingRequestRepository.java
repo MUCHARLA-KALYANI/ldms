@@ -1,10 +1,8 @@
-package com.example.LearningAndDevelopment.training.repository;
+package com.example.LearningAndDevelopment.repository;
 
-import com.example.LearningAndDevelopment.training.model.TrainingRequest;
+import com.example.LearningAndDevelopment.model.TrainingRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface TrainingRequestRepository extends JpaRepository<TrainingRequest, Long> {
-    // Additional query methods can be defined here if needed
+    // You can define custom query methods if needed
 }

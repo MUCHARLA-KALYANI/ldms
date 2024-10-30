@@ -1,7 +1,8 @@
-package com.example.LearningAndDevelopment.training.service;
+package com.example.LearningAndDevelopment.service.impl;
 
-import com.example.LearningAndDevelopment.training.model.TrainingRequest;
-import com.example.LearningAndDevelopment.training.repository.TrainingRequestRepository;
+import com.example.LearningAndDevelopment.model.TrainingRequest;
+import com.example.LearningAndDevelopment.service.TrainingRequestService;
+import com.example.LearningAndDevelopment.repository.TrainingRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
