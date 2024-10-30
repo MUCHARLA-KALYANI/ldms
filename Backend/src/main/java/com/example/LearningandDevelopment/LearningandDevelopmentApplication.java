@@ -1,4 +1,4 @@
-package com.example.LearningAndDevelopment;
+package com.example.LearningandDevelopment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
