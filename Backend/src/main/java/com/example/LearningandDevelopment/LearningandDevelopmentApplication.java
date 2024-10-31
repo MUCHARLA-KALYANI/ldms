@@ -1,11 +1,13 @@
-package com.example.LearningAndDevelopment;
+package com.example.LearningandDevelopment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LearningAndDevelopmentApplication {
+public class LearningandDevelopmentApplication {
+
 	public static void main(String[] args) {
-		SpringApplication.run(LearningAndDevelopmentApplication.class, args);
+		SpringApplication.run(LearningandDevelopmentApplication.class, args);
 	}
+
 }
