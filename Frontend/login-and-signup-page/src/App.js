@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 
+
 function App() {
   return (
     <Router>
@@ -19,5 +20,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
