@@ -8,39 +8,48 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/training-requests")
+@RequestMapping("/api/trainingRequests")
 public class TrainingRequestController {
 
-    @Autowired
-    private TrainingRequestService trainingRequestService;
+    private final TrainingRequestService trainingRequestService;
 
-    @PostMapping
-    public ResponseEntity<TrainingRequest> createTrainingRequest(@RequestBody TrainingRequest trainingRequest) {
-        TrainingRequest savedRequest = trainingRequestService.save(trainingRequest);
-        return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+    @Autowired
+    public TrainingRequestController(TrainingRequestService trainingRequestService) {
+        this.trainingRequestService = trainingRequestService;
     }
 
-    @GetMapping
+    @PostMapping("/create")
+    public ResponseEntity<TrainingRequest> createTrainingRequest(@RequestBody TrainingRequest request) {
+        TrainingRequest createdRequest = trainingRequestService.createTrainingRequest(request);
+        return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<List<TrainingRequest>> getAllTrainingRequests() {
-        List<TrainingRequest> requests = trainingRequestService.getAllRequests();
+        List<TrainingRequest> requests = trainingRequestService.getAllTrainingRequests();
         return new ResponseEntity<>(requests, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TrainingRequest> getTrainingRequestById(@PathVariable Long id) {
-        TrainingRequest request = trainingRequestService.getRequestById(id);
-        if (request != null) {
-            return new ResponseEntity<>(request, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Optional<TrainingRequest> request = trainingRequestService.getTrainingRequestById(id);
+        return request.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<TrainingRequest> updateTrainingRequestStatus(@PathVariable Long id, @RequestBody TrainingRequest updatedRequest) {
+        Optional<TrainingRequest> request = trainingRequestService.updateTrainingRequestStatus(id, updatedRequest.getStatus());
+        return request.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTrainingRequest(@PathVariable Long id) {
-        trainingRequestService.deleteRequest(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean deleted = trainingRequestService.deleteTrainingRequest(id);
+        return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

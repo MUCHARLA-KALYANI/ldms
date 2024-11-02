@@ -1,51 +1,36 @@
 package com.example.LearningAndDevelopment.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDate;
 
+@Data
 @Entity
+@Table(name = "training_requests")
 public class TrainingRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Change this to match your ID type
-    private String employeeName;
-    private String trainingCourse;
-    private String status; // e.g., "Pending", "Approved", "Rejected"
-    // Add other fields as necessary
+    private Long id;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "course_name", nullable = false)
+    private String courseName;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(nullable = false)
+    private String description;
 
-    public String getEmployeeName() {
-        return employeeName;
-    }
+    @Column(nullable = false)
+    private String concepts;
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
-    }
+    @Column(nullable = false)
+    private int duration;
 
-    public String getTrainingCourse() {
-        return trainingCourse;
-    }
+    @Column(nullable = false)
+    private String position;
 
-    public void setTrainingCourse(String trainingCourse) {
-        this.trainingCourse = trainingCourse;
-    }
+    @Column(nullable = false)
+    private String status;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @Column(nullable = true)
+    private LocalDate createdDate;
 }
