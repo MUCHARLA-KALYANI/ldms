@@ -4,8 +4,7 @@ import './TrainingRequestForm.css'; // Import the CSS file
 // ... rest of your component code
 
 const TrainingRequestForm = () => {
-    const [formData, setFormData] = useState({
-        employeeId: '',
+    const [formData, setFormData] = useState({       
         firstName: '',
         lastName: '',
         courseRequested: '',
@@ -33,7 +32,7 @@ const TrainingRequestForm = () => {
 
     const handleReset = () => {
         setFormData({
-            employeeId: '',
+           
             firstName: '',
             lastName: '',
             courseRequested: '',
@@ -50,18 +49,7 @@ const TrainingRequestForm = () => {
         <div style={{ padding: '20px' }}>
             <h1>Training Request Form</h1>
             <form onSubmit={handleSubmit}>
-            <div>
-                    <label>
-                        Employee Id:
-                        <input
-                            type="number"
-                            name="employeeId"
-                            value={formData.employeeId}
-                            onChange={handleChange}
-                            required
-                        />
-                    </label>
-                </div>
+            
                 <div>
                     <label>
                         First Name:
