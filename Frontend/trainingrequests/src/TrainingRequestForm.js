@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import './TrainingRequestForm.css'; // Import the CSS file
-
-// ... rest of your component code
+import React, { useState } from 'react'; 
+import './TrainingRequestForm.css';
 
 const TrainingRequestForm = () => {
-    const [formData, setFormData] = useState({       
+    const [formData, setFormData] = useState({
+        employeeId: '',
         firstName: '',
         lastName: '',
         courseRequested: '',
@@ -24,15 +23,51 @@ const TrainingRequestForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const calculateDuration = (startDate, endDate) => {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffTime = Math.abs(end - start);
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // duration in days
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        // Here you can add your form submission logic (e.g., API call)
+
+        try {
+            const response = await fetch("http://localhost:8081/api/trainingRequests/create", { // Using environment variable for the base URL
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    courseName: formData.courseRequested,
+                    description: formData.jobDescription,
+                    concepts: formData.skillType,
+                    duration: calculateDuration(formData.startDate, formData.endDate),
+                    position: `${formData.firstName} ${formData.lastName}`, 
+                    status: "PENDING",
+                    createdDate: new Date().toISOString().split("T")[0]
+                })
+            });
+
+            if (response.status === 201) {
+                const data = await response.json();
+                console.log("Request created successfully:", data);
+                alert("Request created successfully");
+                handleReset();
+            } else {
+                console.error("Failed to create request");
+                alert("Failed to create request");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        }
     };
 
     const handleReset = () => {
         setFormData({
-           
+            employeeId: '',
             firstName: '',
             lastName: '',
             courseRequested: '',
@@ -49,7 +84,18 @@ const TrainingRequestForm = () => {
         <div style={{ padding: '20px' }}>
             <h1>Training Request Form</h1>
             <form onSubmit={handleSubmit}>
-            
+                <div>
+                    <label>
+                        Employee Id:
+                        <input
+                            type="number"
+                            name="employeeId"
+                            value={formData.employeeId}
+                            onChange={handleChange}
+                            required
+                        />
+                    </label>
+                </div>
                 <div>
                     <label>
                         First Name:
@@ -74,7 +120,6 @@ const TrainingRequestForm = () => {
                         />
                     </label>
                 </div>
-                
                 <div>
                     <label>
                         Course Requested:
@@ -110,8 +155,8 @@ const TrainingRequestForm = () => {
                             required
                         />
                     </label>
-                    </div>
-                    <div>
+                </div>
+                <div>
                     <label>
                         Expected End Date:
                         <input
@@ -134,7 +179,6 @@ const TrainingRequestForm = () => {
                         />
                     </label>
                 </div>
-                
                 <div>
                     <label>
                         Types Of Skill This Training Covers (Hard/Soft/Other):
@@ -163,7 +207,7 @@ const TrainingRequestForm = () => {
                 </div>
                 <div>
                     <button type="button" onClick={handleReset}>
-                        Create New Request
+                        Reset Form
                     </button>
                     <button type="submit">
                         Submit Request
