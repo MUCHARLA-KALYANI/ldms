@@ -42,24 +42,27 @@ function App() {
     fetchEmployees();
   }, []);
   const addEmployee = async () => {
-    console.log("Add Employee button clicked");
-    if (newEmployee.name && newEmployee.trainer && newEmployee.joinedDate && newEmployee.email.endsWith('@gmail.com') && newEmployee.id) {
+    if (
+      newEmployee.name &&
+      newEmployee.trainer &&
+      newEmployee.joinedDate &&
+      newEmployee.email.endsWith('@gmail.com')
+    ) {
       try {
         const response = await fetch('http://localhost:8081/api/employees', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newEmployee),
         });
-        console.log('Response status:', response.status); // Check response status
+  
         if (response.ok) {
           const addedEmployee = await response.json();
-          console.log('Employee added:', addedEmployee);
           setEmployees(prevEmployees => [...prevEmployees, addedEmployee]);
           setEmployeeOptions(prevOptions => [...prevOptions, addedEmployee.name]);
           setNewEmployee({ name: '', trainer: '', joinedDate: '', email: '', id: '' });
           setShowAddEmployee(false);
         } else {
-          console.error('Failed to add employee, response status:', response.status);
+          console.error('Failed to add employee:', await response.text());
         }
       } catch (error) {
         console.error('Error during API call:', error);
@@ -69,13 +72,14 @@ function App() {
     }
   };
   
+  
   // Assign a course to an employee
   const assignCourse = async () => {
     if (courseName && employeeNameForCourse && courseLevel && durationFrom && durationTo && courseLink) {
       const payload = {
         employeeName: employeeNameForCourse,
-        courseName: courseName,
-        courselevel: courseLevel,
+        courseName, // Correct key name
+        courseLevel,
         duration: `${durationFrom} to ${durationTo}`,
         link: courseLink,
       };
@@ -86,8 +90,11 @@ function App() {
           body: JSON.stringify(payload),
         });
         if (response.ok) {
-          const data = await response.json();
-          console.log('Course assigned successfully:', data);
+          console.log('Course assigned successfully');
+          // Refetch employees to update the table
+          const updatedEmployees = await fetch('http://localhost:8081/api/employees');
+          const employeesData = await updatedEmployees.json();
+          setEmployees(employeesData);
           setShowAssignCourse(false); // Close modal
         } else {
           console.error('Error in API response:', response.status);
@@ -99,6 +106,8 @@ function App() {
       alert('Please fill out all fields correctly.');
     }
   };
+  
+  
   
 
   // Submit a training request
@@ -417,21 +426,27 @@ function App() {
   <div className="training-forms">
     <h2>Training Requests</h2>
     
-    {/* New Section for 3 small containers */}
-    <div className="summary-containers">
-      <div className="summary-container">
-        <h3>Course Created</h3>
-        <p>{courseName || "No course created yet"}</p>
-      </div>
-      <div className="summary-container">
-        <h3>Employees</h3>
-        <p>{employees.length} Employees</p>
-      </div>
-      <div className="summary-container">
-        <h3>Request</h3>
-        <p>{trainingRequests.length} Requests</p>
-      </div>
-    </div>
+   {/* New Section for 3 small containers */}
+   <div className="summary-containers">
+  {/* Count unique courses */}
+  <div className="summary-container">
+    <h3>Courses Created</h3>
+    <p>
+      {Array.from(new Set(employees.map(emp => emp.course || ''))).filter(course => course).length} Courses
+    </p>
+  </div>
+
+  <div className="summary-container">
+    <h3>Employees</h3>
+    <p>{employees.length} Employees</p>
+  </div>
+
+  <div className="summary-container">
+    <h3>Requests</h3>
+    <p>{trainingRequests.length} Requests</p>
+  </div>
+</div>
+
 
     {/* Training Request Table */}
     <table>

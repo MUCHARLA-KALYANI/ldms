@@ -92,8 +92,19 @@ app.post('/api/assignments', (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  // Create the assignment
   const assignment = { id: assignments.length + 1, employeeName, courseName, courseLevel, duration, link };
   assignments.push(assignment);
+
+  // Update the employee's record
+  const employee = employees.find(emp => emp.name === employeeName);
+  if (employee) {
+    employee.course = courseName; // Assign the course name
+    employee.level = courseLevel;
+    employee.duration = duration;
+    employee.link = link;
+  }
+
   res.status(201).json(assignment);
 });
 
