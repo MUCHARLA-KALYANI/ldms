@@ -1,39 +1,54 @@
-body {
-  /*background-image: url('background-image.jpg');*/
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
+/* General styling for the entire page */
+* {
+  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
-.home-container {
+body {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+  background: linear-gradient(rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fHRlY2hub2xvZ3klMjBvZmZpY2V8ZW58MHx8fHwxNjE4Nzg0Mzk1&ixlib=rb-1.2.1&q=80&w=1080') 
+no-repeat center center/cover;
+  color: #333;
+  font-size: 16px;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  font-size: 2.5em;
+  margin-bottom: 20px;
 }
 
 .button-container {
   display: flex;
-  justify-content: space-between;
-  width: 200px;
+  justify-content: center;
+  margin-top: 25px;
+  width: 400px; /* Increased width to accommodate larger buttons */
 }
 
 button {
-  background-color: #4CAF50;
+  width: 100%;
+  max-width: 200%; /* Increased width */
+  height: 700px; /* Increased height */
+  padding: 5px;
+  font-size: 1.9em; 
   color: #fff;
-  padding: 10px 20px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
+  margin: 10px;
 }
 
 button:hover {
-  background-color: #3e8e41;
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
+  box-shadow: 0 4px 10px rgba(37, 117, 252, 0.4);
 }

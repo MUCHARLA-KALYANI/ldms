@@ -4,10 +4,9 @@ import './Home.css';
 
 const Home = () => {
   return (
-    <div className="home-container">
-      <h1>Welcome to Learning and Development Management Application</h1>
-      <p>This application is designed to manage training and development programs for employees.</p>
-      <div className="button-container">
+    <>
+      <h1>Learning and Development Management System</h1>
+      <div className='button-container'>
         <Link to="/login">
           <button>Login</button>
         </Link>
@@ -15,7 +14,7 @@ const Home = () => {
           <button>Sign Up</button>
         </Link>
       </div>
-    </div>
+    </>
   );
 };
 
