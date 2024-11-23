@@ -1,6 +1,6 @@
-/* General styling for the entire page (Login and Signup Pages)*/
+/* General styling for the entire page (Login and Signup Pages) */
 * {
-  box-sizing: border-box;
+  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
@@ -26,12 +26,12 @@ h1 {
 }
 
 h2 {
-    color: #fff;
-    text-align: center;
-    font-weight: 700;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-  }
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
 
 form {
   background: #fff;
@@ -57,13 +57,14 @@ input[type="email"],
 input[type="password"],
 input[type="tel"],
 select {
-  width: 100%;
+  width: 100%; /* Ensures full width */
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1em;
   transition: all 0.3s;
+  box-sizing: border-box; /* Includes padding and border in width calculation */
 }
 
 input:focus {
@@ -73,7 +74,7 @@ input:focus {
 }
 
 button {
-  width: 100%;
+  width: 100%; /* Ensures button takes full width */
   padding: 10px;
   font-size: 1em;
   color: #fff;
@@ -82,11 +83,29 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
 }
 
 button:hover {
   background: linear-gradient(90deg, #2575fc, #6a11cb);
   box-shadow: 0 4px 10px rgba(37, 117, 252, 0.4);
+}
+
+/* Styling for the Show Password section */
+.password-toggle {
+  display: flex;
+  align-items: center; /* Align checkbox and label vertically */
+  margin-bottom: 15px; /* Add some margin to space out from other inputs */
+}
+
+.password-toggle input {
+  margin-right: 8px; /* Space between checkbox and label */
+}
+
+.password-toggle label {
+  font-size: 0.9em; /* Adjust label font size */
+  color: #333;
+  margin-bottom: 0; /* Remove bottom margin */
 }
 
 /* Additional styling for navigation links */

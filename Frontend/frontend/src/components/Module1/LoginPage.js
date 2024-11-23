@@ -5,6 +5,7 @@ const LoginPage = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({ email: '', password: '', role: 'employee' });
   const [errors, setErrors] = useState({}); // State to hold validation error messages
   const [apiError, setApiError] = useState(''); // For errors from API response if needed
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,9 +41,9 @@ const LoginPage = ({ onLoginSuccess }) => {
     if (!validateForm()) return; // Stop submission if validation fails
 
     console.log("Login Data:", formData);
-    
+
     // Assuming the login is successful, trigger the onLoginSuccess handler
-    onLoginSuccess();  // Notify parent that login was successful
+    onLoginSuccess(formData.role);  // Pass role to parent component
 
     // If you were connecting to a backend, you would make an API call here
     // e.g., axios.post('/login', formData).then(response => onLoginSuccess()).catch(error => setApiError(error.message));
@@ -66,13 +67,24 @@ const LoginPage = ({ onLoginSuccess }) => {
 
         <label>Password:</label>
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'} // Toggle password visibility
           name="password"
           required
           value={formData.password}
           onChange={handleChange}
         />
         {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+
+        {/* Show Password Checkbox */}
+        <div className="password-toggle">
+          <input
+            type="checkbox"
+            id="showPassword"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)} // Toggle password visibility
+          />
+          <label htmlFor="showPassword">Show Password</label>
+        </div>
 
         <label>Login as:</label>
         <select name="role" value={formData.role} onChange={handleChange}>
