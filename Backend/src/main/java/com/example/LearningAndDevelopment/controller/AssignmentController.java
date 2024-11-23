@@ -1,9 +1,11 @@
 package com.example.LearningAndDevelopment.controller;
+
 import com.example.LearningAndDevelopment.model.Assignment;
 import com.example.LearningAndDevelopment.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -38,17 +40,18 @@ public class AssignmentController {
     // Update an existing assignment by ID
     @PutMapping("/{id}")
     public Assignment updateAssignment(@PathVariable Long id, @RequestBody @Valid Assignment assignment) {
-        // Ensure assignment exists first
         Optional<Assignment> existingAssignment = assignmentService.getAssignmentById(id);
 
         if (existingAssignment.isPresent()) {
-            // Update the existing assignment with new data
             Assignment currentAssignment = existingAssignment.get();
-            currentAssignment.setEmployee(assignment.getEmployee());  // Update employee
-            currentAssignment.setCourse(assignment.getCourse());      // Update course
-            currentAssignment.setDeadline(assignment.getDeadline()); // Update deadline
-            currentAssignment.setStatus(assignment.getStatus());     // Update status
-            return assignmentService.assignCourseToEmployee(currentAssignment);  // Save updated assignment
+            currentAssignment.setCourseName(assignment.getCourseName());
+            currentAssignment.setCourseLevel(assignment.getCourseLevel());
+            currentAssignment.setDuration(assignment.getDuration());
+            currentAssignment.setEmployeeName(assignment.getEmployeeName());
+            currentAssignment.setLink(assignment.getLink());
+            currentAssignment.setStatus(assignment.getStatus());
+            currentAssignment.setDeadline(assignment.getDeadline());
+            return assignmentService.assignCourseToEmployee(currentAssignment);
         } else {
             throw new RuntimeException("Assignment not found with id " + id);
         }
