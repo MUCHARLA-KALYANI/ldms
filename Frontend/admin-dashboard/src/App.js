@@ -74,8 +74,8 @@ function App() {
     if (courseName && employeeNameForCourse && courseLevel && durationFrom && durationTo && courseLink) {
       const payload = {
         employeeName: employeeNameForCourse,
-        course: courseName,
-        level: courseLevel,
+        courseName: courseName,
+        courselevel: courseLevel,
         duration: `${durationFrom} to ${durationTo}`,
         link: courseLink,
       };
