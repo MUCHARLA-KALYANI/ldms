@@ -11,10 +11,10 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fHRlY2hub2xvZ3klMjBvZmZpY2V8ZW58MHx8fHwxNjE4Nzg0Mzk1&ixlib=rb-1.2.1&q=80&w=1080') 
-no-repeat center center/cover;
+  background: linear-gradient(rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.8)),
+    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDR8fHRlY2hub2xvZ3klMjBvZmZpY2V8ZW58MHx8fHwxNjE4Nzg0Mzk1&ixlib=rb-1.2.1&q=80&w=1080')
+    no-repeat center center/cover;
   color: #333;
-  font-size: 16px;
 }
 
 h1 {
@@ -25,30 +25,36 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* Flex container for buttons */
 .button-container {
   display: flex;
-  justify-content: center;
-  margin-top: 25px;
-  width: 400px; /* Increased width to accommodate larger buttons */
+  flex-direction: column; /* Stack buttons vertically for responsiveness */
+  align-items: center; /* Center buttons horizontally */
+  gap: 20px; 
+  width: 100%; 
+  max-width: 600px; 
+  margin: 30px auto 0; /* Center container on the page */
 }
 
+/* Button styling */
 button {
-  width: 100%;
-  max-width: 200%; /* Increased width */
-  height: 700px; /* Increased height */
-  padding: 5px;
-  font-size: 1.9em; 
+  width: 100%; /* Make buttons fill the container width */
+  max-width: 300px; /* Limit button width for better layout */
+  padding: 15px 20px; /* Add adequate padding for text */
+  font-size: 1.2em; /* Adjust font size for readability */
+  font-weight: bold;
+  text-align: center;
   color: #fff;
   background: linear-gradient(90deg, #6a11cb, #2575fc);
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-sizing: border-box; /* Ensures padding and border are included in width calculation */
-  margin: 10px;
 }
 
+/* Button hover effect */
 button:hover {
   background: linear-gradient(90deg, #2575fc, #6a11cb);
-  box-shadow: 0 4px 10px rgba(37, 117, 252, 0.4);
+  box-shadow: 0 4px 10px rgba(37, 117, 252, 0.5);
+  transform: translateY(-3px); /* Slight lift on hover */
 }

@@ -8,24 +8,41 @@ const AdminDashboard = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    // Call API to get courses, requests and employees
-    const coursesData = [
-      { id: 1, courseName: 'Course 1' },
-      { id: 2, courseName: 'Course 2' },
-    ];
-    setCourses(coursesData);
+    const userId = localStorage.getItem('ID');
+    if (!userId) {
+      alert('User ID is missing!');
+      return;
+    }
 
-    const requestsData = [
-      { id: 1, managerName: 'Manager 1', trainingProgram: 'Training Program 1' },
-      { id: 2, managerName: 'Manager 2', trainingProgram: 'Training Program 2' },
-    ];
-    setRequests(requestsData);
+    const fetchRequests = async () => {
+      const token = localStorage.getItem('token');
 
-    const employeesData = [
-      { id: 1, employeeName: 'Employee 1' },
-      { id: 2, employeeName: 'Employee 2' },
-    ];
-    setEmployees(employeesData);
+      
+      if (!token) {
+        alert('Unauthorized access. Please log in again.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8096/api/trainingRequests/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+             'Content-Type': 'application/json'
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch requests');
+        }
+
+        const data = await response.json();
+        setRequests(data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
+
+    fetchRequests();
   }, []);
 
   return (
@@ -93,8 +110,8 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       </div>
-    </div>
+</div>
   );
 };
 
-export default AdminDashboard;
+export default AdminDashboard;    

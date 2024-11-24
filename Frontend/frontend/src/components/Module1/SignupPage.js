@@ -1,69 +1,60 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './styles.css';
 
 const SignupPage = ({ onSignupSuccess }) => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'employee',
+    role: '', // Change role to a single value
   });
 
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [apiError, setApiError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData({ ...formData, [name]: value });
-    
-    // Real-time validation for specific fields
-    switch (name) {
-      case 'name':
-        setErrors((prev) => ({
-          ...prev,
-          name: value ? '' : 'Name is required',
-        }));
-        break;
-      case 'email':
-        setErrors((prev) => ({
-          ...prev,
-          email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Invalid email address',
-        }));
-        break;
-      case 'password':
-        setErrors((prev) => ({
-          ...prev,
-          password: value.length >= 6 ? '' : 'Password must be at least 6 characters long',
-        }));
-        break;
-      case 'confirmPassword':
-        setErrors((prev) => ({
-          ...prev,
-          confirmPassword: value === formData.password ? '' : 'Passwords do not match',
-        }));
-        break;
-      default:
-        break;
-    }
+
+    // Validation
+    setErrors((prev) => ({
+      ...prev,
+      [name]: value ? '' : `${name} is required`,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.username) newErrors.username = 'Username is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      newErrors.email = 'Invalid email address';
+    if (!formData.password || formData.password.length < 6)
+      newErrors.password = 'Password must be at least 6 characters long';
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = 'Passwords do not match';
+    if (!formData.role) newErrors.role = 'Select a role';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError('');
 
-    // Final validation checks
-    const finalErrors = {};
-    if (!formData.name) finalErrors.name = 'Name is required';
-    if (!formData.email) finalErrors.email = 'Email is required';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) finalErrors.email = 'Invalid email address';
-    if (formData.password.length < 6) finalErrors.password = 'Password must be at least 6 characters long';
-    if (formData.password !== formData.confirmPassword) finalErrors.confirmPassword = 'Passwords do not match';
-    setErrors(finalErrors);
+    if (!validateForm()) return;
 
-    if (Object.keys(finalErrors).length === 0) {
-      console.log("Signup Data:", formData);
-      // After successful signup, trigger the onSignupSuccess handler
-      onSignupSuccess(formData.role);  // Pass role to parent component
+    try {
+      const response = await axios.post('http://localhost:8096/api/auth/signup', formData);
+      alert(response.data.message);
+      onSignupSuccess();
+    } catch (err) {
+      setApiError(err.response?.data?.message || 'Signup failed');
     }
   };
 
@@ -71,19 +62,23 @@ const SignupPage = ({ onSignupSuccess }) => {
     <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px', textAlign: 'left' }}>
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
-        <label>User Name:</label>
-        <input type="text" name="name" required value={formData.name} onChange={handleChange} />
-        {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
+        <label>Username:</label>
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+        />
+        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
 
         <label>Email:</label>
-        <input type="email" name="email" required value={formData.email} onChange={handleChange} />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} />
         {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
 
-        <label>Create Password:</label>
+        <label>Password:</label>
         <input
           type={showPassword ? 'text' : 'password'}
           name="password"
-          required
           value={formData.password}
           onChange={handleChange}
         />
@@ -93,30 +88,31 @@ const SignupPage = ({ onSignupSuccess }) => {
         <input
           type={showPassword ? 'text' : 'password'}
           name="confirmPassword"
-          required
           value={formData.confirmPassword}
           onChange={handleChange}
         />
         {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
 
-        {/* Show Password Checkbox */}
         <div className="password-toggle">
           <input
             type="checkbox"
             id="showPassword"
             checked={showPassword}
-            onChange={() => setShowPassword(!showPassword)} // Toggle password visibility
+            onChange={() => setShowPassword(!showPassword)}
           />
           <label htmlFor="showPassword">Show Password</label>
         </div>
 
         <label>Role:</label>
         <select name="role" value={formData.role} onChange={handleChange}>
-          <option value="employee">Employee</option>
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
+          <option value="">Select a role</option>
+          <option value="ROLE_USER">User</option>
+          <option value="ROLE_ADMIN">Admin</option>
+          <option value="ROLE_MANAGER">Manager</option>
         </select>
+        {errors.role && <p style={{ color: 'red' }}>{errors.role}</p>}
 
+        {apiError && <p style={{ color: 'red' }}>{apiError}</p>}
         <button type="submit">Signup</button>
       </form>
     </div>

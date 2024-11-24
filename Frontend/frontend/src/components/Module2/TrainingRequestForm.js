@@ -34,7 +34,7 @@ const TrainingRequestForm = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8081/api/trainingRequests/create", { // Using environment variable for the base URL
+            const response = await fetch("http://localhost:8081/api/trainingRequests/create", { 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './components/Module1/Home';
 import Login from './components/Module1/Login';
@@ -12,47 +13,55 @@ import EmployeeProgressTracking from './components/Module4/EmployeeProgressTrack
 import FeedbackCollection from './components/Module5/FeedbackCollection';
 
 const App = () => {
-  const [role, setRole] = React.useState('');
+  const [role, setRole] = React.useState(localStorage.getItem('role') || '');
 
-  const handleRole = (role) => {
-    setRole(role);
+  const handleRole = (newRole) => {
+    setRole(newRole);
+    localStorage.setItem('role', newRole); // Persist role
   };
+
+  React.useEffect(() => {
+    const storedRole = localStorage.getItem('role');
+    if (storedRole && storedRole !== role) {
+      setRole(storedRole); // Sync state with localStorage
+    }
+  }, [role]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Default route logic */}
+        <Route
+          path="/"
+          element={
+            role === '' ? (  // If no role is set in localStorage
+              <Home />
+            ) : role === 'ROLE_ADMIN' ? (
+              <Navigate to="/admin-dashboard" replace />
+            ) : role === 'ROLE_MANAGER' ? (
+              <Navigate to="/manager-dashboard" replace />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        {/* Authentication routes */}
         <Route path="/login" element={<Login handleRole={handleRole} />} />
         <Route path="/signup" element={<Signup handleRole={handleRole} />} />
-        <Route
-          path="/manager-dashboard"
-          element={role === 'Manager' ? <ManagerDashboard /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/training-request"
-          element={role === 'Manager' ? <TrainingRequestForm /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/admin-dashboard"
-          element={role === 'Admin' ? <AdminDashboard /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/assign-course/:id"
-          element={role === 'Admin' ? <AssignCourse /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/courses"
-          element={role === 'Admin' ? <Courses /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/employee-progress-tracking"
-          element={role === 'Admin' ? <EmployeeProgressTracking /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/feedback-collection"
-          element={role === 'Admin' ? <FeedbackCollection /> : <Navigate to="/" replace />}
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
+
+        {/* Manager routes */}
+        <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+        <Route path="/training-request" element={<TrainingRequestForm />} />
+
+        {/* Admin routes */}
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/assign-course/:id" element={<AssignCourse />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/employee-progress-tracking" element={<EmployeeProgressTracking />} />
+        <Route path="/feedback-collection" element={<FeedbackCollection />} />
+
+        {/* Fallback route */}
+        <Route path="*" element={<h2>404: Page Not Found. <Link to="/">Go Home</Link></h2>} />
       </Routes>
     </BrowserRouter>
   );
